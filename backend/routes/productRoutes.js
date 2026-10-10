@@ -4,7 +4,7 @@ const Product = require("../models/Product");
 const {
     authMiddleware,
     adminMiddleware
-} = require("../middleware/authMiddleware");
+} = require("../middleware/authmiddleware");
 
 const router = express.Router();
 
