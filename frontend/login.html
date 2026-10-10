@@ -5,11 +5,17 @@
 
     <meta charset="UTF-8">
 
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
 
     <title>Login</title>
 
-    <link rel="stylesheet" href="css/style.css">
+    <link
+        rel="stylesheet"
+        href="css/style.css"
+    >
 
 </head>
 
@@ -17,16 +23,12 @@
 
     <header>
 
-        <h1>CodeAlpha Ecommerce</h1>
+        <h1>
+            CodeAlpha Store
+        </h1>
 
         <nav>
-
-            <a href="index.html">Products</a>
-
-            <a href="cart.html">Cart 🛒</a>
-
-            <a href="register.html">Register</a>
-
+            <!-- auth.js -->
         </nav>
 
     </header>
@@ -34,126 +36,201 @@
 
     <main>
 
-        <h2>Login</h2>
+        <section class="auth-container">
 
-        <form id="loginForm">
+            <div class="auth-box">
 
-            <input
-                type="email"
-                id="email"
-                placeholder="Enter your email"
-                required
-            >
+                <h2>
+                    Login
+                </h2>
 
-            <br><br>
-
-            <input
-                type="password"
-                id="password"
-                placeholder="Enter password"
-                required
-            >
-
-            <br><br>
-
-            <button type="submit">
-                Login
-            </button>
-
-        </form>
+                <p class="auth-subtitle">
+                    Login to your account
+                </p>
 
 
-        <p>
+                <form id="loginForm">
 
-            Don't have an account?
+                    <label>
+                        Email
+                    </label>
 
-            <a href="register.html">
-                Register
-            </a>
+                    <input
+                        type="email"
+                        id="loginEmail"
+                        placeholder="Enter your email"
+                        required
+                    >
 
-        </p>
+
+                    <label>
+                        Password
+                    </label>
+
+                    <input
+                        type="password"
+                        id="loginPassword"
+                        placeholder="Enter your password"
+                        required
+                    >
+
+
+                    <button
+                        type="submit"
+                        class="auth-btn"
+                    >
+                        Login
+                    </button>
+
+
+                    <p
+                        id="loginMessage"
+                        class="auth-message"
+                    ></p>
+
+                </form>
+
+
+                <p class="auth-footer">
+
+                    Don't have an account?
+
+                    <a href="register.html">
+                        Register
+                    </a>
+
+                </p>
+
+            </div>
+
+        </section>
 
     </main>
 
 
+    <script src="js/auth.js"></script>
+
+
     <script>
 
-        const form =
-            document.getElementById("loginForm");
+        const loginForm =
+            document.getElementById(
+                "loginForm"
+            );
 
 
-        form.addEventListener("submit", async (e) => {
+        loginForm.addEventListener(
+            "submit",
+            async (event) => {
 
-            e.preventDefault();
-
-
-            const email =
-                document.getElementById("email").value;
-
-            const password =
-                document.getElementById("password").value;
+                event.preventDefault();
 
 
-            try {
-
-                const response = await fetch(
-                    "http://localhost:3000/api/auth/login",
-                    {
-                        method: "POST",
-
-                        headers: {
-                            "Content-Type": "application/json"
-                        },
-
-                        body: JSON.stringify({
-                            email,
-                            password
-                        })
-                    }
-                );
+                const email =
+                    document.getElementById(
+                        "loginEmail"
+                    ).value.trim();
 
 
-                const data = await response.json();
+                const password =
+                    document.getElementById(
+                        "loginPassword"
+                    ).value;
 
 
-                if (!response.ok) {
+                const message =
+                    document.getElementById(
+                        "loginMessage"
+                    );
 
-                    alert(data.message);
+
+                if (!email || !password) {
+
+                    message.textContent =
+                        "Please fill all fields.";
 
                     return;
                 }
 
 
-                // Save token
-                localStorage.setItem(
-                    "token",
-                    data.token
-                );
+                try {
+
+                    const response =
+                        await fetch(
+                            "http://localhost:3000/api/auth/login",
+                            {
+                                method: "POST",
+
+                                headers: {
+                                    "Content-Type":
+                                        "application/json"
+                                },
+
+                                body:
+                                    JSON.stringify({
+                                        email,
+                                        password
+                                    })
+                            }
+                        );
 
 
-                // Save user
-                localStorage.setItem(
-                    "user",
-                    JSON.stringify(data.user)
-                );
+                    const data =
+                        await response.json();
 
 
-                alert("Login successful!");
+                    if (!response.ok) {
+
+                        message.textContent =
+                            data.message ||
+                            "Login failed.";
+
+                        return;
+                    }
 
 
-                window.location.href =
-                    "index.html";
+                    localStorage.setItem(
+                        "token",
+                        data.token
+                    );
 
 
-            } catch (error) {
+                    localStorage.setItem(
+                        "user",
+                        JSON.stringify(
+                            data.user
+                        )
+                    );
 
-                console.log(error);
 
-                alert("Something went wrong");
+                    message.textContent =
+                        "Login successful!";
+
+
+                    if (
+                        data.user.role ===
+                        "admin"
+                    ) {
+
+                        window.location.href =
+                            "admin.html";
+
+                    } else {
+
+                        window.location.href =
+                            "index.html";
+                    }
+
+                } catch (error) {
+
+                    console.log(error);
+
+                    message.textContent =
+                        "Unable to connect to server.";
+                }
 
             }
-
-        });
+        );
 
     </script>
 

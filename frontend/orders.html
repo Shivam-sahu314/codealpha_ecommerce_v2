@@ -2,184 +2,36 @@
 <html lang="en">
 
 <head>
-
     <meta charset="UTF-8">
-
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <title>My Orders</title>
-
+    <title>My Orders - CodeAlpha Store</title>
     <link rel="stylesheet" href="css/style.css">
-
 </head>
 
 <body>
 
     <header>
-
-        <h1>CodeAlpha Ecommerce</h1>
-
-        <nav>
-
-            <a href="index.html">Products</a>
-
-            <a href="cart.html">Cart 🛒</a>
-
-            <a href="orders.html">My Orders</a>
-
-            <a href="login.html">Login</a>
-
-        </nav>
-
+        <h1>CodeAlpha Store</h1>
+        <nav></nav>
     </header>
 
-
     <main>
+        <section class="orders-container">
 
-        <h2>My Orders</h2>
+            <div class="orders-header">
+                <h2>My Orders</h2>
+                <p>View your order history and track deliveries.</p>
+            </div>
 
-        <div id="ordersList"></div>
+            <div id="ordersList">
+                <p>Loading orders...</p>
+            </div>
 
+        </section>
     </main>
 
+    <script src="js/auth.js"></script>
+    <script src="js/orders.js"></script>
 
-    <script>
-
-        const ordersList =
-            document.getElementById("ordersList");
-
-
-        const token =
-            localStorage.getItem("token");
-
-
-        // Login check
-        if (!token) {
-
-            alert("Please login first!");
-
-            window.location.href = "login.html";
-
-        }
-
-
-        async function getOrders() {
-
-            try {
-
-                const response = await fetch(
-                    "http://localhost:3000/api/orders/my-orders",
-                    {
-
-                        headers: {
-
-                            "Authorization":
-                                `Bearer ${token}`
-
-                        }
-
-                    }
-                );
-
-
-                const orders =
-                    await response.json();
-
-
-                if (!response.ok) {
-
-                    ordersList.innerHTML =
-                        `<p>${orders.message}</p>`;
-
-                    return;
-                }
-
-
-                displayOrders(orders);
-
-
-            } catch (error) {
-
-                console.log(error);
-
-                ordersList.innerHTML =
-                    "<p>Failed to load orders.</p>";
-
-            }
-
-        }
-
-
-        function displayOrders(orders) {
-
-            ordersList.innerHTML = "";
-
-
-            if (orders.length === 0) {
-
-                ordersList.innerHTML =
-                    "<p>No orders found.</p>";
-
-                return;
-            }
-
-
-            orders.forEach(order => {
-
-                let productsHTML = "";
-
-
-                order.products.forEach(item => {
-
-                    productsHTML += `
-
-                        <p>
-                            ${item.product.name}
-                            ×
-                            ${item.quantity}
-                        </p>
-
-                    `;
-
-                });
-
-
-                ordersList.innerHTML += `
-
-                    <div class="product-card">
-
-                        <h3>
-                            Order ID:
-                            ${order._id}
-                        </h3>
-
-                        <p>
-                            Status:
-                            ${order.status}
-                        </p>
-
-                        <h3>
-                            Total:
-                            ₹${order.totalAmount}
-                        </h3>
-
-                        <h4>Products:</h4>
-
-                        ${productsHTML}
-
-                    </div>
-
-                `;
-
-            });
-
-        }
-
-
-        getOrders();
-
-    </script>
-<script src="js/auth.js"></script>
 </body>
-
 </html>

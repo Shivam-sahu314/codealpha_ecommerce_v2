@@ -1,0 +1,270 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard | CodeAlpha Store</title>
+
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/admin.css">
+</head>
+
+<body class="admin-page">
+    <div class="admin-layout">
+
+        <aside class="admin-sidebar">
+            <a href="index.html" class="admin-brand">
+                <span class="brand-icon">C</span>
+                <span>
+                    <strong>CodeAlpha</strong>
+                    <small>STORE ADMIN</small>
+                </span>
+            </a>
+
+            <p class="sidebar-label">WORKSPACE</p>
+
+            <nav class="admin-nav">
+                <a href="#dashboard" class="active">
+                    <span>▦</span> Dashboard
+                </a>
+                <a href="#products-section">
+                    <span>▣</span> Products
+                </a>
+                <a href="#add-product-section">
+                    <span>＋</span> Add Product
+                </a>
+                <a href="#orders-section" id="allOrdersLink">
+                    <span>☷</span> Orders
+                </a>
+            </nav>
+
+            <div class="sidebar-bottom">
+                <div class="admin-profile-icon">A</div>
+                <div class="admin-profile-text">
+                    <strong>Administrator</strong>
+                    <small>Store management</small>
+                </div>
+            </div>
+        </aside>
+
+        <main class="admin-main">
+
+            <header class="admin-topbar">
+                <div>
+                    <p class="topbar-eyebrow">WORKSPACE / OVERVIEW</p>
+                    <h1>Admin Dashboard</h1>
+                </div>
+
+                <div class="topbar-actions">
+                    <a href="index.html" class="store-link">↗ View Store</a>
+                    <button type="button" class="logout-button" onclick="logout()">
+                        Logout
+                    </button>
+                </div>
+            </header>
+
+            <section id="dashboard" class="admin-content-section">
+                <div class="welcome-section">
+                    <div>
+                        <h2>Welcome back, Admin 👋</h2>
+                        <p>Here's what's happening with your store.</p>
+                    </div>
+                    <span class="admin-live-badge">
+                        <span></span> Admin Panel
+                    </span>
+                </div>
+
+                <div class="dashboard">
+
+                    <article class="dashboard-card products-stat">
+                        <div class="stat-top">
+                            <span>Total Products</span>
+                            <span class="stat-icon">▣</span>
+                        </div>
+                        <p id="totalProducts">0</p>
+                        <small>Products in your store</small>
+                    </article>
+
+                    <article
+                        class="dashboard-card orders-stat clickable-stat"
+                        data-order-filter="all"
+                        role="button"
+                        tabindex="0"
+                        aria-label="View all orders"
+                    >
+                        <div class="stat-top">
+                            <span>Total Orders</span>
+                            <span class="stat-icon">☷</span>
+                        </div>
+                        <p id="totalOrders">0</p>
+                        <small>Click to view all orders</small>
+                    </article>
+
+                    <article
+                        class="dashboard-card pending-stat clickable-stat"
+                        data-order-filter="Pending"
+                        role="button"
+                        tabindex="0"
+                        aria-label="View pending orders"
+                    >
+                        <div class="stat-top">
+                            <span>Pending Orders</span>
+                            <span class="stat-icon">◷</span>
+                        </div>
+                        <p id="pendingOrders">0</p>
+                        <small>Click to view pending orders</small>
+                    </article>
+
+                    <article class="dashboard-card sales-stat">
+                        <div class="stat-top">
+                            <span>Total Sales</span>
+                            <span class="stat-icon">₹</span>
+                        </div>
+                        <p class="sales-value">
+                            ₹<span id="totalSales">0</span>
+                        </p>
+                        <small>Excluding cancelled orders</small>
+                    </article>
+
+                </div>
+            </section>
+
+            <!-- Add Product -->
+            <section id="add-product-section" class="admin-section admin-panel-card">
+                <div class="section-heading">
+                    <div>
+                        <span class="section-kicker">CATALOG</span>
+                        <h2>Add New Product</h2>
+                        <p>Add a product to your online store.</p>
+                    </div>
+                </div>
+
+                <form id="productForm" class="admin-product-form">
+                    <div class="form-field">
+                        <label for="productName">Product Name</label>
+                        <input type="text" id="productName"
+                            placeholder="e.g. Classic Sneakers"
+                            maxlength="150" required>
+                    </div>
+
+                    <div class="form-field">
+                        <label for="productCategory">Category</label>
+                        <input type="text" id="productCategory"
+                            placeholder="e.g. Footwear"
+                            maxlength="100" required>
+                    </div>
+
+                    <div class="form-field">
+                        <label for="productPrice">Price (₹)</label>
+                        <input type="number" id="productPrice"
+                            placeholder="1999" min="0.01" step="0.01" required>
+                    </div>
+
+                    <div class="form-field">
+                        <label for="productStock">Available Stock</label>
+                        <input type="number" id="productStock"
+                            placeholder="50" min="0" step="1" required>
+                    </div>
+
+                    <div class="form-field form-field-full">
+                        <label for="productDescription">Description</label>
+                        <textarea id="productDescription" rows="3"
+                            maxlength="2000"
+                            placeholder="Describe your product..." required></textarea>
+                    </div>
+
+                    <div class="form-field form-field-full">
+                        <label for="productImage">Product Image URL</label>
+                        <input type="url" id="productImage"
+                            placeholder="https://example.com/image.jpg" required>
+
+                        <div class="image-preview-container">
+                            <p class="preview-heading">IMAGE PREVIEW</p>
+                            <img id="addImagePreview"
+                                alt="Product image preview" hidden>
+                            <p id="addImageMessage" role="status">
+                                Enter an image URL to preview.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="form-field-full form-actions">
+                        <button type="submit" class="primary-admin-button">
+                            + Add Product
+                        </button>
+                    </div>
+                </form>
+
+                <p id="productMessage" class="auth-message" role="status"></p>
+            </section>
+
+            <!-- Manage Products -->
+            <section id="products-section" class="admin-section admin-panel-card">
+                <div class="section-heading">
+                    <div>
+                        <span class="section-kicker">INVENTORY</span>
+                        <h2>Manage Products</h2>
+                        <p>Review your catalog and update product details.</p>
+                    </div>
+                </div>
+
+                <div class="admin-product-toolbar">
+                    <input type="search" id="productSearchInput"
+                        placeholder="Search products by name..."
+                        aria-label="Search products">
+
+                    <select id="productCategoryFilter" aria-label="Filter by category">
+                        <option value="">All Categories</option>
+                    </select>
+
+                    <select id="productStockFilter" aria-label="Filter by stock">
+                        <option value="">All Stock Status</option>
+                        <option value="in-stock">In Stock</option>
+                        <option value="low-stock">Low Stock</option>
+                        <option value="out-of-stock">Out of Stock</option>
+                    </select>
+
+                    <span id="productResultsCount" role="status">
+                        Loading products...
+                    </span>
+                </div>
+
+                <div id="adminProducts" class="admin-products-list">
+                    <p>Loading products...</p>
+                </div>
+            </section>
+
+            <!-- Manage Orders -->
+            <section id="orders-section" class="admin-section admin-panel-card">
+                <div class="section-heading">
+                    <div>
+                        <span class="section-kicker">FULFILLMENT</span>
+                        <h2 id="ordersHeading">Manage Orders</h2>
+                        <p id="ordersDescription">
+                            Track orders and update their current status.
+                        </p>
+                    </div>
+
+                    <button type="button" id="showAllOrdersButton"
+                        class="primary-admin-button">
+                        Show All Orders
+                    </button>
+                </div>
+
+                <div id="adminOrders" class="admin-orders-list">
+                    <p>Loading orders...</p>
+                </div>
+            </section>
+
+            <footer class="admin-footer">
+                <span>© 2026 CodeAlpha Store</span>
+                <span>Admin Dashboard</span>
+            </footer>
+
+        </main>
+    </div>
+
+    <script src="js/admin.js"></script>
+</body>
+</html>

@@ -1,32 +1,124 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>CodeAlpha Ecommerce</title>
+    <meta name="theme-color" content="#111827">
+    <meta name="description" content="Discover quality products at CodeAlpha Store.">
+
+    <title>CodeAlpha Store | Shop Smarter</title>
 
     <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/store.css">
 </head>
-<body>
 
-    <header>
-        <h1>CodeAlpha Ecommerce</h1>
+<body class="store-page">
 
-        <nav>
-    <a href="index.html">Products</a>
-    <a href="cart.html">Cart 🛒</a>
-    <a href="orders.html">My Orders</a>
-    <a href="login.html">Login</a>
-</nav>
+    <header class="store-header">
+        <a class="store-brand" href="index.html" aria-label="CodeAlpha Store home">
+            <span class="store-brand-icon">C</span>
+            <span>CodeAlpha<span class="brand-light"> Store</span></span>
+        </a>
+
+        <nav aria-label="Main navigation">
+            <!-- auth.js automatically adds navigation links here -->
+        </nav>
     </header>
 
-    <main>
-        <h2>Products</h2>
+    <main class="store-main">
 
-        <div id="productList" class="product-grid"></div>
+        <section class="store-hero">
+            <div class="store-hero-content">
+                <span class="store-eyebrow">
+                    YOUR NEXT GREAT FIND STARTS HERE
+                </span>
+
+                <h1>Good finds.<br><span>Better everyday.</span></h1>
+
+                <p>
+                    Explore our collection of products picked to make
+                    your everyday shopping simple.
+                </p>
+
+                <a class="store-hero-link" href="#shop-products">
+                    Explore collection <span aria-hidden="true">↓</span>
+                </a>
+            </div>
+
+            <div class="store-hero-art" aria-hidden="true">
+                <div class="hero-orbit hero-orbit-one"></div>
+                <div class="hero-orbit hero-orbit-two"></div>
+                <div class="hero-center">
+                    <span class="hero-sparkle">✳</span>
+                    <span class="hero-center-text">SHOP<br>YOUR WAY</span>
+                </div>
+                <span class="hero-floating hero-floating-one">✦</span>
+                <span class="hero-floating hero-floating-two">+</span>
+            </div>
+        </section>
+
+        <section class="store-intro" id="shop-products">
+            <div>
+                <p class="store-eyebrow">THE COLLECTION</p>
+                <h2>Find your next favourite.</h2>
+                <p class="store-subtitle">
+                    Browse the collection and discover something new.
+                </p>
+            </div>
+        </section>
+
+        <section class="store-toolbar" aria-label="Product search and filters">
+            <div class="store-search">
+                <span aria-hidden="true">⌕</span>
+                <input
+                    type="search"
+                    id="searchInput"
+                    placeholder="Search products..."
+                    aria-label="Search products"
+                    autocomplete="off"
+                >
+            </div>
+
+            <div class="store-category">
+                <label for="categoryFilter">Shop by category</label>
+                <select id="categoryFilter">
+                    <option value="all">All Categories</option>
+                </select>
+            </div>
+        </section>
+
+        <div class="store-results">
+            <p id="resultsCount" aria-live="polite">Loading products...</p>
+        </div>
+
+        <section
+            id="productList"
+            class="store-product-grid"
+            aria-label="Available products"
+        >
+            <p class="store-message">Loading products...</p>
+        </section>
+
+        <section class="store-bottom-banner">
+            <span class="banner-symbol" aria-hidden="true">✳</span>
+            <div>
+                <h2>Shopping made simple.</h2>
+                <p>Discover products, find your favourites and shop with ease.</p>
+            </div>
+            <a href="#shop-products">Browse products ↑</a>
+        </section>
+
     </main>
-<script src="js/auth.js"></script>
+
+    <footer class="store-footer">
+        <a class="store-footer-brand" href="index.html">CodeAlpha Store</a>
+        <p>Thoughtful finds for everyday life.</p>
+        <span>© CodeAlpha Store. All rights reserved.</span>
+    </footer>
+
+    <script src="js/auth.js"></script>
     <script src="js/main.js"></script>
 
 </body>

@@ -1,121 +1,146 @@
 const express = require("express");
 const Product = require("../models/Product");
 
+const {
+    authMiddleware,
+    adminMiddleware
+} = require("../middleware/authMiddleware");
+
 const router = express.Router();
 
 
-// ===============================
-// GET ALL PRODUCTS
-// ===============================
+// ================= GET ALL PRODUCTS =================
 
 router.get("/", async (req, res) => {
-
     try {
-
         const products = await Product.find();
 
         res.json(products);
 
     } catch (error) {
+        console.log(error);
 
         res.status(500).json({
             message: "Failed to fetch products"
         });
-
     }
-
 });
 
 
-// ===============================
-// GET SINGLE PRODUCT
-// ===============================
+// ================= GET SINGLE PRODUCT =================
 
 router.get("/:id", async (req, res) => {
-
     try {
-
         const product = await Product.findById(req.params.id);
 
         if (!product) {
-
             return res.status(404).json({
                 message: "Product not found"
             });
-
         }
 
         res.json(product);
 
     } catch (error) {
+        console.log(error);
 
         res.status(500).json({
             message: "Failed to fetch product"
         });
-
     }
-
 });
 
 
-// ===============================
-// ADD PRODUCT
-// ===============================
+// ================= ADD PRODUCT =================
 
-router.post("/", async (req, res) => {
+router.post(
+    "/",
+    authMiddleware,
+    adminMiddleware,
+    async (req, res) => {
+        try {
+            const product = await Product.create(req.body);
 
-    try {
+            res.status(201).json(product);
 
-        const product = await Product.create(req.body);
+        } catch (error) {
+            console.log(error);
 
-        res.status(201).json(product);
-
-    } catch (error) {
-
-        res.status(400).json({
-            message: "Failed to create product"
-        });
-
+            res.status(400).json({
+                message: "Failed to create product"
+            });
+        }
     }
+);
 
-});
 
+// ================= UPDATE PRODUCT =================
 
-// ===============================
-// UPDATE PRODUCT
-// ===============================
+router.put(
+    "/:id",
+    authMiddleware,
+    adminMiddleware,
+    async (req, res) => {
+        try {
+            const product = await Product.findByIdAndUpdate(
+                req.params.id,
+                req.body,
+                {
+                    new: true,
+                    runValidators: true
+                }
+            );
 
-router.put("/:id", async (req, res) => {
-
-    try {
-
-        const product = await Product.findByIdAndUpdate(
-            req.params.id,
-            req.body,
-            {
-                new: true
+            if (!product) {
+                return res.status(404).json({
+                    message: "Product not found"
+                });
             }
-        );
 
-        if (!product) {
+            res.json(product);
 
-            return res.status(404).json({
-                message: "Product not found"
+        } catch (error) {
+            console.log(error);
+
+            res.status(400).json({
+                message: "Failed to update product"
+            });
+        }
+    }
+);
+
+
+// ================= DELETE PRODUCT =================
+
+router.delete(
+    "/:id",
+    authMiddleware,
+    adminMiddleware,
+    async (req, res) => {
+        try {
+            const product = await Product.findByIdAndDelete(
+                req.params.id
+            );
+
+            if (!product) {
+                return res.status(404).json({
+                    message: "Product not found"
+                });
+            }
+
+            res.json({
+                message: "Product deleted successfully"
             });
 
+        } catch (error) {
+            console.log(error);
+
+            res.status(500).json({
+                message: "Failed to delete product"
+            });
         }
-
-        res.json(product);
-
-    } catch (error) {
-
-        res.status(400).json({
-            message: "Failed to update product"
-        });
-
     }
-
-});
+);
 
 
 module.exports = router;

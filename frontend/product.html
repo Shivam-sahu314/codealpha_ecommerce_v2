@@ -2,152 +2,306 @@
 <html lang="en">
 
 <head>
+
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
 
     <title>Product Details</title>
 
-    <link rel="stylesheet" href="css/style.css">
+    <link
+        rel="stylesheet"
+        href="css/style.css"
+    >
+
 </head>
 
 <body>
 
     <header>
 
-        <h1>CodeAlpha Ecommerce</h1>
+        <h1>
+            CodeAlpha Store
+        </h1>
 
         <nav>
-    <a href="index.html">Products</a>
-    <a href="cart.html">Cart 🛒</a>
-    <a href="orders.html">My Orders</a>
-    <a href="login.html">Login</a>
-</nav>
+            <!-- auth.js -->
+        </nav>
 
     </header>
 
 
     <main>
 
-        <h2>Product Details</h2>
+        <section
+            id="productDetails"
+            class="product-details"
+        >
 
-        <div id="productDetails"></div>
+            <p>
+                Loading product...
+            </p>
+
+        </section>
 
     </main>
 
 
+    <script src="js/auth.js"></script>
+
+
     <script>
 
-        const API_URL = "http://localhost:3000/api/products";
+        const API_URL =
+            "http://localhost:3000/api/products";
 
 
-        // URL se product ID nikalna
-        const params = new URLSearchParams(window.location.search);
+        const params =
+            new URLSearchParams(
+                window.location.search
+            );
 
-        const productId = params.get("id");
+
+        const productId =
+            params.get("id");
 
 
-        async function getProduct() {
+        async function loadProduct() {
+
+            const productDetails =
+                document.getElementById(
+                    "productDetails"
+                );
+
+
+            if (!productId) {
+
+                productDetails.innerHTML = `
+                    <p>
+                        Product ID missing.
+                    </p>
+                `;
+
+                return;
+            }
+
 
             try {
 
-                const response = await fetch(`${API_URL}/${productId}`);
+                const response =
+                    await fetch(
+                        `${API_URL}/${productId}`
+                    );
 
-                const product = await response.json();
 
-                console.log("Product:", product);
+                const product =
+                    await response.json();
 
-                displayProduct(product);
+
+                if (!response.ok) {
+
+                    productDetails.innerHTML = `
+                        <p>
+                            ${
+                                product.message ||
+                                "Product not found"
+                            }
+                        </p>
+                    `;
+
+                    return;
+                }
+
+
+                productDetails.innerHTML = `
+
+                    <div
+                        class="product-detail-image"
+                    >
+
+                        <img
+                            src="${product.image}"
+                            alt="${product.name}"
+                        >
+
+                    </div>
+
+
+                    <div
+                        class="product-detail-info"
+                    >
+
+                        <p class="category">
+                            ${product.category}
+                        </p>
+
+
+                        <h2>
+                            ${product.name}
+                        </h2>
+
+
+                        <p class="price">
+                            ₹${product.price}
+                        </p>
+
+
+                        <p class="description">
+                            ${product.description}
+                        </p>
+
+
+                        <p>
+                            ${
+                                product.stock > 0
+                                ? `Available Stock: ${product.stock}`
+                                : "Out of stock"
+                            }
+                        </p>
+
+
+                        ${
+                            product.stock > 0
+                            ? `
+
+                                <div
+                                    class="quantity-box"
+                                >
+
+                                    <label>
+                                        Quantity:
+                                    </label>
+
+                                    <input
+                                        type="number"
+                                        id="quantity"
+                                        value="1"
+                                        min="1"
+                                        max="${product.stock}"
+                                    >
+
+                                </div>
+
+
+                                <button
+                                    class="add-cart-btn"
+                                    onclick="addToCart()"
+                                >
+                                    Add to Cart 🛒
+                                </button>
+
+                            `
+                            :
+                            `
+                                <button disabled>
+                                    Out of Stock
+                                </button>
+                            `
+                        }
+
+                    </div>
+
+                `;
+
+
+                window.currentProduct =
+                    product;
+
 
             } catch (error) {
 
-                console.log("Error:", error);
+                console.log(error);
 
+                productDetails.innerHTML = `
+                    <p>
+                        Unable to connect to server.
+                    </p>
+                `;
+            }
+        }
+
+
+        function addToCart() {
+
+            const product =
+                window.currentProduct;
+
+
+            const quantity =
+                Number(
+                    document.getElementById(
+                        "quantity"
+                    ).value
+                );
+
+
+            if (!product) {
+                return;
             }
 
-        }
 
+            if (
+                quantity < 1 ||
+                quantity > product.stock
+            ) {
 
-        function displayProduct(product) {
+                alert(
+                    "Invalid quantity"
+                );
 
-            const productDetails =
-                document.getElementById("productDetails");
+                return;
+            }
 
-
-            productDetails.innerHTML = `
-
-                <div class="product-card">
-
-                    <img 
-                        src="${product.image}" 
-                        alt="${product.name}"
-                    >
-
-                    <h2>${product.name}</h2>
-
-                    <p>${product.description}</p>
-
-                    <h3>₹${product.price}</h3>
-
-                    <p>
-                        Category: ${product.category}
-                    </p>
-
-                    <p>
-                        Stock: ${product.stock}
-                    </p>
-
-                    <br>
-
-                    <button onclick="addToCart('${product._id}')">
-                        Add to Cart
-                    </button>
-
-                </div>
-
-            `;
-        }
-
-
-        function addToCart(productId) {
 
             let cart =
-                JSON.parse(localStorage.getItem("cart")) || [];
+                JSON.parse(
+                    localStorage.getItem("cart")
+                ) || [];
 
 
-            const existingProduct = cart.find(
-                product => product._id === productId
-            );
+            const existingProduct =
+                cart.find(
+                    item =>
+                        item.product._id ===
+                        product._id
+                );
 
 
             if (existingProduct) {
 
-                existingProduct.quantity++;
+                const newQuantity =
+                    existingProduct.quantity +
+                    quantity;
+
+
+                if (
+                    newQuantity >
+                    product.stock
+                ) {
+
+                    alert(
+                        "Not enough stock available"
+                    );
+
+                    return;
+                }
+
+
+                existingProduct.quantity =
+                    newQuantity;
 
             } else {
 
-                const product = {
+                cart.push({
 
-                    _id: productId,
+                    product: product,
 
-                    name: document.querySelector(
-                        "#productDetails h2"
-                    ).innerText,
+                    quantity: quantity
 
-                    price: Number(
-                        document.querySelector(
-                            "#productDetails h3"
-                        ).innerText.replace("₹", "")
-                    ),
-
-                    image: document.querySelector(
-                        "#productDetails img"
-                    ).src,
-
-                    quantity: 1
-                };
-
-
-                cart.push(product);
+                });
             }
 
 
@@ -157,14 +311,20 @@
             );
 
 
-            alert("Product added to cart!");
+            alert(
+                "Product added to cart!"
+            );
+
+
+            window.location.href =
+                "cart.html";
         }
 
 
-        getProduct();
+        loadProduct();
 
     </script>
-<script src="js/auth.js"></script>
+
 </body>
 
 </html>

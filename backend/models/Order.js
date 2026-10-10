@@ -14,13 +14,54 @@ const orderSchema = new mongoose.Schema({
                 ref: "Product",
                 required: true
             },
-
             quantity: {
                 type: Number,
                 required: true
             }
         }
     ],
+
+    deliveryDetails: {
+        name: {
+            type: String,
+            required: true,
+            trim: true
+        },
+        phone: {
+            type: String,
+            required: true,
+            trim: true
+        },
+        address: {
+            type: String,
+            required: true,
+            trim: true
+        },
+        city: {
+            type: String,
+            required: true,
+            trim: true
+        },
+        pincode: {
+            type: String,
+            required: true,
+            trim: true
+        }
+    },
+
+    paymentMethod: {
+        type: String,
+        enum: ["COD", "ONLINE_DEMO"],
+        required: true,
+        default: "COD"
+    },
+
+    paymentStatus: {
+        type: String,
+        enum: ["Pending", "Paid", "Failed"],
+        required: true,
+        default: "Pending"
+    },
 
     totalAmount: {
         type: Number,
@@ -29,12 +70,17 @@ const orderSchema = new mongoose.Schema({
 
     status: {
         type: String,
+        enum: [
+            "Pending",
+            "Processing",
+            "Shipped",
+            "Delivered",
+            "Cancelled"
+        ],
         default: "Pending"
     }
 }, {
     timestamps: true
 });
 
-const Order = mongoose.model("Order", orderSchema);
-
-module.exports = Order;
+module.exports = mongoose.model("Order", orderSchema);

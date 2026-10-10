@@ -1,38 +1,97 @@
+// ===============================
+// AUTHENTICATION STATE
+// ===============================
+
+const token = localStorage.getItem("token");
+
+const user = JSON.parse(
+    localStorage.getItem("user")
+);
+
+
+// ===============================
+// UPDATE NAVBAR
+// ===============================
+
 function updateNavbar() {
 
-    const token = localStorage.getItem("token");
-
-    const nav = document.querySelector("nav");
+    const nav =
+        document.querySelector("nav");
 
     if (!nav) {
         return;
     }
 
 
-    if (token) {
+    // ===============================
+    // LOGGED IN USER
+    // ===============================
+
+    if (token && user) {
+
+        let adminLink = "";
+
+        if (user.role === "admin") {
+
+            adminLink = `
+                <a href="admin.html">
+                    Admin Panel
+                </a>
+            `;
+        }
+
 
         nav.innerHTML = `
-            <a href="index.html">Products</a>
 
-            <a href="cart.html">Cart 🛒</a>
+            <a href="index.html">
+                Products
+            </a>
 
-            <a href="orders.html">My Orders</a>
+            <a href="cart.html">
+                Cart 🛒
+            </a>
 
-            <a href="#" onclick="logout()">
+            <a href="orders.html">
+                My Orders
+            </a>
+
+            ${adminLink}
+
+            <a
+                href="#"
+                onclick="logout()"
+            >
                 Logout
             </a>
-        `;
 
-    } else {
+        `;
+    }
+
+
+    // ===============================
+    // NOT LOGGED IN
+    // ===============================
+
+    else {
 
         nav.innerHTML = `
-            <a href="index.html">Products</a>
 
-            <a href="cart.html">Cart 🛒</a>
+            <a href="index.html">
+                Products
+            </a>
 
-            <a href="login.html">Login</a>
+            <a href="cart.html">
+                Cart 🛒
+            </a>
 
-            <a href="register.html">Register</a>
+            <a href="login.html">
+                Login
+            </a>
+
+            <a href="register.html">
+                Register
+            </a>
+
         `;
     }
 }
@@ -44,14 +103,25 @@ function updateNavbar() {
 
 function logout() {
 
-    localStorage.removeItem("token");
+    localStorage.removeItem(
+        "token"
+    );
 
-    localStorage.removeItem("user");
+    localStorage.removeItem(
+        "user"
+    );
 
-    alert("Logout successful!");
+    alert(
+        "Logout successful!"
+    );
 
-    window.location.href = "login.html";
+    window.location.href =
+        "login.html";
 }
 
+
+// ===============================
+// RUN
+// ===============================
 
 updateNavbar();

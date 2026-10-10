@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Checkout - CodeAlpha Store</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+
+    <header>
+        <h1>CodeAlpha Store</h1>
+        <nav></nav>
+    </header>
+
+    <main>
+        <section class="checkout-container">
+
+            <div class="checkout-header">
+                <h2>Checkout</h2>
+                <p>Complete your order</p>
+            </div>
+
+            <div class="checkout-layout">
+
+                <div class="checkout-details">
+                    <h3>Delivery Details</h3>
+
+                    <form id="checkoutForm">
+
+                        <label for="customerName">Full Name</label>
+                        <input type="text" id="customerName"
+                            placeholder="Enter your full name" required>
+
+                        <label for="customerPhone">Phone Number</label>
+                        <input type="tel" id="customerPhone"
+                            placeholder="Enter 10 digit phone number"
+                            maxlength="10" required>
+
+                        <label for="customerAddress">Address</label>
+                        <textarea id="customerAddress"
+                            placeholder="Enter your complete address"
+                            rows="4" required></textarea>
+
+                        <label for="customerCity">City</label>
+                        <input type="text" id="customerCity"
+                            placeholder="Enter city" required>
+
+                        <label for="customerPincode">Pincode</label>
+                        <input type="text" id="customerPincode"
+                            placeholder="Enter 6 digit pincode"
+                            maxlength="6" required>
+
+                        <h3 class="payment-heading">Payment Method</h3>
+
+                        <label class="payment-option">
+                            <input type="radio" name="paymentMethod"
+                                value="COD" checked>
+                            <span>
+                                <strong>Cash on Delivery</strong>
+                                <small>Pay when your order arrives</small>
+                            </span>
+                        </label>
+
+                        <label class="payment-option">
+                            <input type="radio" name="paymentMethod"
+                                value="ONLINE_DEMO">
+                            <span>
+                                <strong>Online Payment (Demo)</strong>
+                                <small>Simulation only — no real payment</small>
+                            </span>
+                        </label>
+
+                        <p id="checkoutMessage" class="auth-message"></p>
+
+                        <button type="submit" class="confirm-order-btn">
+                            Place Order
+                        </button>
+
+                    </form>
+                </div>
+
+                <div class="checkout-summary">
+                    <h3>Order Summary</h3>
+
+                    <div id="checkoutItems">
+                        <p>Loading...</p>
+                    </div>
+
+                    <div class="checkout-total">
+                        <span>Total Amount</span>
+                        <strong>₹<span id="checkoutTotal">0</span></strong>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+    </main>
+
+    <script src="js/auth.js"></script>
+    <script src="js/checkout.js"></script>
+
+</body>
+</html>

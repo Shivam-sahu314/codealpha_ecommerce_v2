@@ -1,3 +1,7 @@
+
+const dns = require("dns");
+dns.setServers(["8.8.8.8"]);
+
 const productRoutes = require("./routes/productRoutes");
 const authRoutes = require("./routes/authRoutes");
 const orderRoutes = require("./routes/orderRoutes");
@@ -15,10 +19,13 @@ const MONGO_URI = process.env.MONGO_URI;
 
 app.use(cors());
 app.use(express.json());
+
 app.use("/api/products", productRoutes);
 app.use("/api/auth", authRoutes);
 app.use("/api/orders", orderRoutes);
-mongoose.connect(MONGO_URI)
+
+mongoose
+    .connect(MONGO_URI)
     .then(() => {
         console.log("MongoDB connected");
     })

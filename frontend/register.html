@@ -5,11 +5,17 @@
 
     <meta charset="UTF-8">
 
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
 
     <title>Register</title>
 
-    <link rel="stylesheet" href="css/style.css">
+    <link
+        rel="stylesheet"
+        href="css/style.css"
+    >
 
 </head>
 
@@ -17,16 +23,12 @@
 
     <header>
 
-        <h1>CodeAlpha Ecommerce</h1>
+        <h1>
+            CodeAlpha Store
+        </h1>
 
         <nav>
-
-            <a href="index.html">Products</a>
-
-            <a href="cart.html">Cart 🛒</a>
-
-            <a href="login.html">Login</a>
-
+            <!-- auth.js -->
         </nav>
 
     </header>
@@ -34,116 +36,241 @@
 
     <main>
 
-        <h2>Create Account</h2>
+        <section class="auth-container">
 
-        <form id="registerForm">
+            <div class="auth-box">
 
-            <input
-                type="text"
-                id="name"
-                placeholder="Enter your name"
-                required
-            >
+                <h2>
+                    Create Account
+                </h2>
 
-            <br><br>
+                <p class="auth-subtitle">
+                    Register a new account
+                </p>
 
-            <input
-                type="email"
-                id="email"
-                placeholder="Enter your email"
-                required
-            >
 
-            <br><br>
+                <form id="registerForm">
 
-            <input
-                type="password"
-                id="password"
-                placeholder="Enter password"
-                required
-            >
+                    <label>
+                        Name
+                    </label>
 
-            <br><br>
+                    <input
+                        type="text"
+                        id="registerName"
+                        placeholder="Enter your name"
+                        required
+                    >
 
-            <button type="submit">
-                Register
-            </button>
 
-        </form>
+                    <label>
+                        Email
+                    </label>
 
-        <p>
-            Already have an account?
-            <a href="login.html">Login</a>
-        </p>
+                    <input
+                        type="email"
+                        id="registerEmail"
+                        placeholder="Enter your email"
+                        required
+                    >
+
+
+                    <label>
+                        Password
+                    </label>
+
+                    <input
+                        type="password"
+                        id="registerPassword"
+                        placeholder="Enter password"
+                        required
+                    >
+
+
+                    <label>
+                        Confirm Password
+                    </label>
+
+                    <input
+                        type="password"
+                        id="confirmPassword"
+                        placeholder="Confirm password"
+                        required
+                    >
+
+
+                    <button
+                        type="submit"
+                        class="auth-btn"
+                    >
+                        Register
+                    </button>
+
+
+                    <p
+                        id="registerMessage"
+                        class="auth-message"
+                    ></p>
+
+                </form>
+
+
+                <p class="auth-footer">
+
+                    Already have an account?
+
+                    <a href="login.html">
+                        Login
+                    </a>
+
+                </p>
+
+            </div>
+
+        </section>
 
     </main>
 
 
+    <script src="js/auth.js"></script>
+
+
     <script>
 
-        const form = document.getElementById("registerForm");
+        const registerForm =
+            document.getElementById(
+                "registerForm"
+            );
 
 
-        form.addEventListener("submit", async (e) => {
+        registerForm.addEventListener(
+            "submit",
+            async (event) => {
 
-            e.preventDefault();
-
-
-            const name =
-                document.getElementById("name").value;
-
-            const email =
-                document.getElementById("email").value;
-
-            const password =
-                document.getElementById("password").value;
+                event.preventDefault();
 
 
-            try {
-
-                const response = await fetch(
-                    "http://localhost:3000/api/auth/register",
-                    {
-                        method: "POST",
-
-                        headers: {
-                            "Content-Type": "application/json"
-                        },
-
-                        body: JSON.stringify({
-                            name,
-                            email,
-                            password
-                        })
-                    }
-                );
+                const name =
+                    document.getElementById(
+                        "registerName"
+                    ).value.trim();
 
 
-                const data = await response.json();
+                const email =
+                    document.getElementById(
+                        "registerEmail"
+                    ).value.trim();
 
 
-                if (!response.ok) {
+                const password =
+                    document.getElementById(
+                        "registerPassword"
+                    ).value;
 
-                    alert(data.message);
+
+                const confirmPassword =
+                    document.getElementById(
+                        "confirmPassword"
+                    ).value;
+
+
+                const message =
+                    document.getElementById(
+                        "registerMessage"
+                    );
+
+
+                if (
+                    !name ||
+                    !email ||
+                    !password ||
+                    !confirmPassword
+                ) {
+
+                    message.textContent =
+                        "Please fill all fields.";
 
                     return;
                 }
 
 
-                alert("Registration successful!");
+                if (password.length < 6) {
 
-                window.location.href = "login.html";
+                    message.textContent =
+                        "Password must be at least 6 characters.";
+
+                    return;
+                }
 
 
-            } catch (error) {
+                if (
+                    password !==
+                    confirmPassword
+                ) {
 
-                console.log(error);
+                    message.textContent =
+                        "Passwords do not match.";
 
-                alert("Something went wrong");
+                    return;
+                }
+
+
+                try {
+
+                    const response =
+                        await fetch(
+                            "http://localhost:3000/api/auth/register",
+                            {
+                                method: "POST",
+
+                                headers: {
+                                    "Content-Type":
+                                        "application/json"
+                                },
+
+                                body:
+                                    JSON.stringify({
+                                        name,
+                                        email,
+                                        password
+                                    })
+                            }
+                        );
+
+
+                    const data =
+                        await response.json();
+
+
+                    if (!response.ok) {
+
+                        message.textContent =
+                            data.message ||
+                            "Registration failed.";
+
+                        return;
+                    }
+
+
+                    alert(
+                        "Registration successful! Please login."
+                    );
+
+
+                    window.location.href =
+                        "login.html";
+
+
+                } catch (error) {
+
+                    console.log(error);
+
+                    message.textContent =
+                        "Unable to connect to server.";
+                }
 
             }
-
-        });
+        );
 
     </script>
 
