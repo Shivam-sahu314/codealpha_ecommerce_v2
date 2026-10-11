@@ -1147,3 +1147,13 @@ body:not(.store-page):not(.admin-page) > header nav a:hover {
     overflow-wrap: normal;
     min-width: max-content;
 }
+
+/* Fix product card price on mobile */
+.product-card .price {
+    white-space: nowrap;
+    word-break: normal;
+    overflow-wrap: normal;
+    width: fit-content;
+    max-width: 100%;
+    flex-shrink: 0;
+}

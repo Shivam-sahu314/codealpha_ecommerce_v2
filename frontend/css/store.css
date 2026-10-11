@@ -559,14 +559,18 @@
     border-top: 1px solid #edf0f5;
 }
 
+
 .store-page .store-product-price {
     margin: 0;
     color: var(--store-ink);
     font-size: 21px;
     font-weight: 850;
     line-height: 1.3;
-    overflow-wrap: anywhere;
+    white-space: nowrap;
+    overflow-wrap: normal;
+    word-break: normal;
 }
+
 
 .store-page .store-view-button {
     width: 100%;
@@ -1134,6 +1138,16 @@
         min-height: 36px;
         padding: 7px 4px !important;
         font-size: 11px !important;
+    }
+}
+
+
+@media (max-width: 600px) {
+    .store-page .store-product-price {
+        white-space: nowrap !important;
+        overflow-wrap: normal !important;
+        word-break: normal !important;
+        font-size: 14px !important;
     }
 }
 
