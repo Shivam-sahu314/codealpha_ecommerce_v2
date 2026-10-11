@@ -1139,3 +1139,11 @@ body:not(.store-page):not(.admin-page) > header nav a:hover {
         animation-duration: .01ms !important;
     }
 }
+
+/* Prevent prices from breaking on mobile */
+.price {
+    white-space: nowrap;
+    word-break: keep-all;
+    overflow-wrap: normal;
+    min-width: max-content;
+}
