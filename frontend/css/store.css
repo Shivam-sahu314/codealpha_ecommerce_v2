@@ -533,6 +533,7 @@
     line-height: 1.4;
     overflow-wrap: anywhere;
     -webkit-box-orient: vertical;
+    line-clamp: 2;
     -webkit-line-clamp: 2;
 }
 
@@ -546,6 +547,7 @@
     line-height: 1.65;
     overflow-wrap: anywhere;
     -webkit-box-orient: vertical;
+    line-clamp: 2;
     -webkit-line-clamp: 2;
 }
 
